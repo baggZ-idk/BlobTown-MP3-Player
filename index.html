@@ -11,12 +11,12 @@
         background-color: #020202c6;
         padding: 10px;
         position: fixed;
-        bottom: 5px;
-        right: 5px;
+        bottom: 10px;
+        right: 10px;
     }
 
     button {
-        border-radius: 5px;
+        border-radius: 7px;
         background-color: white;
         color: black;
         border: 0px;
@@ -27,7 +27,7 @@
 
     body {
         font-family: Arial, Helvetica, sans-serif;
-        color: white;
+        color: rgb(255, 255, 255);
         margin: 0;
     }
 
@@ -38,6 +38,14 @@
         height: 100%;
         z-index: -1;
     }
+
+    h2 {
+        margin: 0px;
+    }
+
+    h5 {
+        margin-top: 3px;
+    }
 </style>
 </head>
 
@@ -47,6 +55,7 @@
 
 <div id="Mod">
     <h2>Music Player</h2>
+    <h5>By: baggZ</h5>
     <h4 id="Playing">Stopped</h4>
 
     <button id="Previous">Previous</button>
@@ -63,8 +72,8 @@
         frame.src = "https://app.blobtown.com/inventory?blobt=" + blobt;
     }
 
-(async () => {
     //Mod
+    (async () => {
     const playLabel = document.getElementById("Playing");
     const pauseBtn = document.getElementById("Pause");
     const nextBtn = document.getElementById("Next");
@@ -131,10 +140,9 @@
     nextBtn.addEventListener("click", nextSong);
     prevBtn.addEventListener("click", prevSong);
 
-    // Initial label
     updateLabel();
 
-})();
+    })();
 </script>
 
 </body>
