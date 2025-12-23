@@ -84,12 +84,10 @@
     songs.forEach(s => s.audio.preload = "auto");
 
     function updateLabel() {
-        if (!songs[current].audio.currentTime || (!playing && songs[current].audio.paused && songs[current].audio.currentTime === 0)) {
-            playLabel.textContent = "Stopped";
-        } else if (playing) {
-            playLabel.textContent = "Playing: " + songs[current].name;
-        } else {
+        if (!playing) {
             playLabel.textContent = "Paused: " + songs[current].name;
+        } else {
+            playLabel.textContent = "Playing: " + songs[current].name;
         }
     }
 
