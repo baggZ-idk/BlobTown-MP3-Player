@@ -1,5 +1,5 @@
 (async () => {
-  const url = "https://api.github.com/repos/baggZ-development-team/soundboard-V2/contents/audio";
+  const url = "https://api.github.com/repos/baggZ-idk/BlobTown-MP3-Player/contents/audio";
 
   const res = await fetch(url);
   const data = await res.json();
