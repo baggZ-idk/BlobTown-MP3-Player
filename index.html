@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlobMod</title>
+
+<style>
+    #Mod {
+        border-radius: 5px;
+        background-color: #020202c6;
+        padding: 10px;
+        position: fixed;
+        bottom: 5px;
+        right: 5px;
+    }
+
+    button {
+        border-radius: 5px;
+        background-color: white;
+        color: black;
+        border: 0px;
+        font-size: medium;
+        cursor: pointer;
+        margin: 2px;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        margin: 0;
+    }
+
+    #Frame {
+        position: fixed;
+        border: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+</style>
+</head>
+
+<body>
+
+<iframe id="Frame"></iframe>
+
+<div id="Mod">
+    <h2>Music Player</h2>
+    <h4 id="Playing">Playing: —</h4>
+
+    <button id="Previous">Previous</button>
+    <button id="Pause">Play</button>
+    <button id="Next">Next</button>
+</div>
+
+<script>
+(async () => {
+    //Initialization
+    const blobt = new URLSearchParams(window.location.search).get("blobt");
+    const frame = document.getElementById("Frame");
+
+    if (blobt) {
+        frame.src = "https://app.blobtown.com/inventory?blobt=" + blobt;
+    }
+
+    //Mod
+    const playLabel = document.getElementById("Playing");
+    const pauseBtn = document.getElementById("Pause");
+    const nextBtn = document.getElementById("Next");
+    const prevBtn = document.getElementById("Previous");
+
+    const res = await fetch("Audios.json");
+    const data = await res.json();
+
+    let songs = data.files.map(file => ({
+        name: file.replace(".mp3", "").replace(/[_-]/g, " "),
+        audio: new Audio(`audio/${file}`)
+    }));
+
+    let current = 0;
+    let playing = false;
+
+    songs.forEach(s => s.audio.preload = "auto");
+
+    function updateLabel() {
+        playLabel.textContent = "Playing: " + songs[current].name;
+    }
+
+    function playSong() {
+        songs.forEach(s => {
+            s.audio.pause();
+            s.audio.currentTime = 0;
+        });
+
+        songs[current].audio.play();
+        playing = true;
+        pauseBtn.textContent = "Pause";
+        updateLabel();
+    }
+
+    function togglePlay() {
+        const audio = songs[current].audio;
+        if (audio.paused) {
+            audio.play();
+            playing = true;
+            pauseBtn.textContent = "Pause";
+        } else {
+            audio.pause();
+            playing = false;
+            pauseBtn.textContent = "Play";
+        }
+    }
+
+    function nextSong() {
+        current = (current + 1) % songs.length;
+        playSong();
+    }
+
+    function prevSong() {
+        current = (current - 1 + songs.length) % songs.length;
+        playSong();
+    }
+
+    pauseBtn.addEventListener("click", togglePlay);
+    nextBtn.addEventListener("click", nextSong);
+    prevBtn.addEventListener("click", prevSong);
+})();
+</script>
+
+</body>
+</html>
