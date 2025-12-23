@@ -47,7 +47,7 @@
 
 <div id="Mod">
     <h2>Music Player</h2>
-    <h4 id="Playing">Playing: —</h4>
+    <h4 id="Playing">Stopped</h4>
 
     <button id="Previous">Previous</button>
     <button id="Pause">Play</button>
@@ -55,7 +55,6 @@
 </div>
 
 <script>
-(async () => {
     //Initialization
     const blobt = new URLSearchParams(window.location.search).get("blobt");
     const frame = document.getElementById("Frame");
@@ -64,6 +63,7 @@
         frame.src = "https://app.blobtown.com/inventory?blobt=" + blobt;
     }
 
+(async () => {
     //Mod
     const playLabel = document.getElementById("Playing");
     const pauseBtn = document.getElementById("Pause");
@@ -84,7 +84,13 @@
     songs.forEach(s => s.audio.preload = "auto");
 
     function updateLabel() {
-        playLabel.textContent = "Playing: " + songs[current].name;
+        if (!songs[current].audio.currentTime || (!playing && songs[current].audio.paused && songs[current].audio.currentTime === 0)) {
+            playLabel.textContent = "Stopped";
+        } else if (playing) {
+            playLabel.textContent = "Playing: " + songs[current].name;
+        } else {
+            playLabel.textContent = "Paused: " + songs[current].name;
+        }
     }
 
     function playSong() {
@@ -110,6 +116,7 @@
             playing = false;
             pauseBtn.textContent = "Play";
         }
+        updateLabel();
     }
 
     function nextSong() {
@@ -125,6 +132,10 @@
     pauseBtn.addEventListener("click", togglePlay);
     nextBtn.addEventListener("click", nextSong);
     prevBtn.addEventListener("click", prevSong);
+
+    // Initial label
+    updateLabel();
+
 })();
 </script>
 
